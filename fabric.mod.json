@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "spirit_client",
+  "version": "1.0.0+1.21.11",
+  "name": "Spirit Client",
+  "description": "Spirit Client - Create By Confis0oooooo. Press Right Shift.",
+  "authors": ["Confis0oooooo"],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["client.confis.ConfisClient", "client.confis.spirit.SpiritClient"]
+  },
+  "mixins": ["confis0oooooo.mixins.json", "spirit.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.18.1",
+    "minecraft": ">=1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}

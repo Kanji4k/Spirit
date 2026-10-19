@@ -1,0 +1,36 @@
+plugins {
+    id 'fabric-loom' version '1.14-SNAPSHOT'
+}
+
+version = '1.0.0+1.21.11'
+group = 'client.confis'
+
+repositories { mavenCentral() }
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    // original Confis classes: used only to compile against (Module, Config...)
+    modCompileOnly files('libs/confis-original.jar')
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+tasks.withType(JavaCompile).configureEach { options.release = 21 }
+
+// ONE final jar = our remapped Spirit classes + the original Confis classes
+tasks.register('spiritJar', Jar) {
+    dependsOn remapJar
+    archiveBaseName = 'SpiritClient'
+    archiveVersion = project.version
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from(zipTree(remapJar.archiveFile))                 // first: wins (our fabric.mod.json)
+    from(zipTree('libs/confis-original.jar')) {
+        exclude 'fabric.mod.json', 'META-INF/MANIFEST.MF'
+    }
+}
+build.finalizedBy spiritJar
